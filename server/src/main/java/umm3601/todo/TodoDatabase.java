@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -39,7 +40,19 @@ public class TodoDatabase {
         Todo[] filteredTodos = allTodos;
         //add query parameters here
 
-    /*     if (queryParams.containsKey("age")) {
+               if (queryParams.containsKey("limit")) {
+            String limitParam = queryParams.get("limit").get(0);
+            try {
+                int limit = Integer.parseInt(limitParam);
+                filteredTodos = limitTodos(filteredTodos, limit);
+            } catch (NumberFormatException e) {
+                throw new BadRequestResponse("Specified limit '" + limitParam + "' can't be parsed to an integer");
+            }
+        }
+
+            
+
+         /* if (queryParams.containsKey("age")) {
             String ageParam = queryParams.get("age").get(0);
             try {
               int targetAge = Integer.parseInt(ageParam);
@@ -49,13 +62,58 @@ public class TodoDatabase {
             }
           }
           // Filter company if defined
-          if (queryParams.containsKey("company")) {
-            String targetCompany = queryParams.get("company").get(0);
-            filteredTodos = filterTodosByCompany(filteredTodos, targetCompany);
+          if (queryParams.containsKey("status")) {
+            String targetStatus = queryParams.get("status").get(0);
+            filteredTodos = filterTodosByStatus(filteredTodos, targetStatus);
           } */
-        
+
+
+           //Filtering todos by status
+        if (queryParams.containsKey("status")) {
+            String statusParam = queryParams.get("status").get(0);
+            filteredTodos = filterTodosByStatus(filteredTodos, statusParam);
+        }
+
+        if (queryParams.containsKey("contains")) {
+            String containsParam = queryParams.get("contains").get(0);
+            filteredTodos = filterTodosByContains(filteredTodos, containsParam);
+        }
+
         return filteredTodos;
     }
 
 
+    private Todo[] filterTodosByStatus(Todo[] todos, String statusParam) {
+        boolean targetStatus = getStatusFromParam(statusParam);
+
+        return Arrays.stream(todos)
+            .filter(todo -> todo.status == targetStatus)
+            .toArray(Todo[]::new);
+    }
+
+    // complete = true and incomplete = false
+    private boolean getStatusFromParam(String statusParam) {
+        switch (statusParam.toLowerCase()) {
+            case "complete":
+                return true;
+            case "incomplete":
+                return false;
+            default:
+                throw new BadRequestResponse("Invalid status parameter: " + statusParam);
+        }
+    }
+
+      private Todo[] limitTodos(Todo[] todos, int limit) {
+        return Arrays.stream(todos).limit(limit).toArray(Todo[]::new);
+    }
+
+    private Todo[] filterTodosByContains(Todo[] todos, String containsParam) {
+        Pattern pattern = Pattern.compile(containsParam, Pattern.CASE_INSENSITIVE);
+
+        return Arrays.stream(todos)
+                .filter(todo -> pattern.matcher(todo.body).find())
+                .toArray(Todo[]::new);
+    }
+
+    
 }
