@@ -73,6 +73,21 @@ public class TodoDatabase {
         return filteredTodos;
     }
 
+    public Todo[] filterTodosById (Todo[] todos, String targetId) {
+      return Arrays.stream(todos).filter(x -> x._id.equals(targetId)).toArray(Todo[]::new);
+    }
+
+    public Todo[] filterTodosByOwner (Todo[] todos, String targetOwner) {
+      return Arrays.stream(todos).filter(x -> x.owner.equals(targetOwner)).toArray(Todo[]::new);
+    }
+
+    public Todo[] filterTodosByStatus(Todo[] todos, boolean targetStatus) {
+      return Arrays.stream(todos).filter(x -> x.status == targetStatus).toArray(Todo[]::new);
+  }
+
+    public Todo[] filterTodosByBody(Todo[] todos, String targetBody) {
+      return Arrays.stream(todos).filter(x-> x.body.equals(targetBody)).toArray(Todo[]::new);
+    }
 
     private Todo[] filterTodosByStatus(Todo[] todos, String statusParam) {
         boolean targetStatus = getStatusFromParam(statusParam);
@@ -121,6 +136,4 @@ public class TodoDatabase {
                 .filter(todo -> pattern.matcher(todo.category).find())
                 .toArray(Todo[]::new);
     }
-
-
 }
