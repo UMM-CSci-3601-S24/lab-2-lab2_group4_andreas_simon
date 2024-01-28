@@ -7,7 +7,7 @@ import umm3601.todo.TodoController;
 
 public class Main {
   public static final String USER_DATA_FILE = "/users.json";
-  public static final String TODO_DATA_FILE ="/todos.json";
+  public static final String TODO_DATA_FILE = "/todos.json";
 
   public static void main(String[] args) throws IOException {
 

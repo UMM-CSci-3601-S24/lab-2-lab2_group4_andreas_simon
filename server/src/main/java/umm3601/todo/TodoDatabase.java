@@ -16,7 +16,7 @@ public class TodoDatabase {
 
     private Todo[] allTodos;
 
-    public TodoDatabase(String todoDataFile) throws IOException{
+    public TodoDatabase(String todoDataFile) throws IOException {
         InputStream resourceAsStream = getClass().getResourceAsStream(todoDataFile);
         if (resourceAsStream == null) {
             throw new IOException("Could not find " + todoDataFile);
@@ -49,25 +49,6 @@ public class TodoDatabase {
                 throw new BadRequestResponse("Specified limit '" + limitParam + "' can't be parsed to an integer");
             }
         }
-
-            
-
-         /* if (queryParams.containsKey("age")) {
-            String ageParam = queryParams.get("age").get(0);
-            try {
-              int targetAge = Integer.parseInt(ageParam);
-              filteredTodos = filterTodosByAge(filteredTodos, targetAge);
-            } catch (NumberFormatException e) {
-              throw new BadRequestResponse("Specified age '" + ageParam + "' can't be parsed to an integer");
-            }
-          }
-          // Filter company if defined
-          if (queryParams.containsKey("status")) {
-            String targetStatus = queryParams.get("status").get(0);
-            filteredTodos = filterTodosByStatus(filteredTodos, targetStatus);
-          } */
-
-
            //Filtering todos by status
         if (queryParams.containsKey("status")) {
             String statusParam = queryParams.get("status").get(0);
@@ -141,5 +122,5 @@ public class TodoDatabase {
                 .toArray(Todo[]::new);
     }
 
-    
+
 }

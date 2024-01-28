@@ -8,7 +8,7 @@ import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
 import umm3601.Controller;
 
-public class TodoController implements Controller{
+public class TodoController implements Controller {
 
     private TodoDatabase todoDatabase;
 
