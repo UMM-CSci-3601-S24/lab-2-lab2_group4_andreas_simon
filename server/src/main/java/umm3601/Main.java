@@ -7,7 +7,7 @@ import umm3601.todo.TodoController;
 
 public class Main {
   public static final String USER_DATA_FILE = "/users.json";
-  public static final String TODO_DATA_FILE ="/todos.json";
+  public static final String TODO_DATA_FILE = "/todos.json";
 
   public static void main(String[] args) throws IOException {
 
@@ -34,21 +34,13 @@ public class Main {
    * @throws IOException
    */
   static Controller[] getControllers() throws IOException {
-    Controller[] userController = new Controller[] {
+    Controller[] controllers = new Controller[] {
       // You would add additional controllers here, as you create them,
       // although you need to make sure that each of your new controllers implements
       // the `Controller` interface.
-      UserController.buildUserController(USER_DATA_FILE)
-    };
-
-    Controller[] todoController = new Controller [] {
+      UserController.buildUserController(USER_DATA_FILE),
       TodoController.buildTodoController(TODO_DATA_FILE)
     };
-
-    Controller[] controllers = new Controller[userController.length + todoController.length];
-    System.arraycopy(userController, 0, controllers, 0, userController.length);
-    System.arraycopy(todoController, 0, controllers, userController.length, todoController.length);
-
     return controllers;
   }
 
