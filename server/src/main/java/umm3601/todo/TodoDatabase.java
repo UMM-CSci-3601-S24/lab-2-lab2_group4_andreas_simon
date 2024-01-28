@@ -84,6 +84,11 @@ public class TodoDatabase {
             filteredTodos = filterTodosByOwner(filteredTodos, ownerParam);
         }
 
+        if (queryParams.containsKey("category")) {
+            String categoryParam = queryParams.get("category").get(0);
+            filteredTodos = filterTodosByCategory(filteredTodos, categoryParam);
+        }
+
         return filteredTodos;
     }
 
@@ -125,6 +130,14 @@ public class TodoDatabase {
 
         return Arrays.stream(todos)
                 .filter(todo -> pattern.matcher(todo.owner).find())
+                .toArray(Todo[]::new);
+    }
+
+    private Todo[] filterTodosByCategory(Todo[] todos, String categoryParam) {
+        Pattern pattern = Pattern.compile(categoryParam, Pattern.CASE_INSENSITIVE);
+
+        return Arrays.stream(todos)
+                .filter(todo -> pattern.matcher(todo.category).find())
                 .toArray(Todo[]::new);
     }
 
