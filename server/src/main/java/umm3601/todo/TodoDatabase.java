@@ -79,6 +79,11 @@ public class TodoDatabase {
             filteredTodos = filterTodosByContains(filteredTodos, containsParam);
         }
 
+        if (queryParams.containsKey("owner")) {
+            String ownerParam = queryParams.get("owner").get(0);
+            filteredTodos = filterTodosByOwner(filteredTodos, ownerParam);
+        }
+
         return filteredTodos;
     }
 
@@ -91,7 +96,7 @@ public class TodoDatabase {
             .toArray(Todo[]::new);
     }
 
-    // complete = true and incomplete = false
+    // complete = true, incomplete = false
     private boolean getStatusFromParam(String statusParam) {
         switch (statusParam.toLowerCase()) {
             case "complete":
@@ -112,6 +117,14 @@ public class TodoDatabase {
 
         return Arrays.stream(todos)
                 .filter(todo -> pattern.matcher(todo.body).find())
+                .toArray(Todo[]::new);
+    }
+
+    private Todo[] filterTodosByOwner(Todo[] todos, String ownerParam) {
+        Pattern pattern = Pattern.compile(ownerParam, Pattern.CASE_INSENSITIVE);
+
+        return Arrays.stream(todos)
+                .filter(todo -> pattern.matcher(todo.owner).find())
                 .toArray(Todo[]::new);
     }
 
